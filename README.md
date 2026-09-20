@@ -1,6 +1,6 @@
 # ReadHub
 
-ShelfSync is a locally hosted digital bookshelf application that allows users to manage their personal book collection, read PDFs, rate books, and write reviews.
+ReadHub is a locally hosted digital bookshelf application that allows users to manage their personal book collection, read PDFs, rate books, and write reviews.
 
 ## Main Features
 
