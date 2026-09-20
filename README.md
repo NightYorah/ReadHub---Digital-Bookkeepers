@@ -12,7 +12,7 @@ ShelfSync is a locally hosted digital bookshelf application that allows users to
 - View book information
 - Rate books using a 5-star rating system
 - Write and manage personal reviews
-- Administrative management of users and content
+
 
 ## Technology Stack
 
