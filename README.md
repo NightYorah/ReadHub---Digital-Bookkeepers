@@ -32,7 +32,7 @@ ReadHub is a locally hosted digital bookshelf application that allows users to m
 
 🚧 **Work in Progress**
 
-ShelfSync is currently being developed as a university group project.
+ReadHub is currently being developed as a university group project.
 
 ## Repository Structure
 
