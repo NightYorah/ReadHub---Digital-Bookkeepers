@@ -23,7 +23,7 @@ ReadHub is a locally hosted digital bookshelf application that allows users to m
 
 ## Team Members
 
-- Mahsa Fazli
+- Mahsa Fazli (former)
 - Gyasi Darbeau
 - Riley Judge
 - Jingting Xu
