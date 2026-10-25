@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout"/>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="searchLineEdit">
+      <property name="locale">
+       <locale language="English" country="AmericanSamoa"/>
+      </property>
+      <property name="placeholderText">
+       <string>Search books by title</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="sortComboBox">
+      <property name="locale">
+       <locale language="English" country="UnitedStates"/>
+      </property>
+      <item>
+       <property name="text">
+        <string>Title(A-Z)</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Rating</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item>
+     <widget class="QListWidget" name="bookListWidget">
+      <property name="locale">
+       <locale language="English" country="AmericanSamoa"/>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>30</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
