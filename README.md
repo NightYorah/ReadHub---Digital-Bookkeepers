@@ -65,11 +65,6 @@ The team will integrate and test the implemented features before merging the ite
 - MySQL Server
 - Qt MySQL (QMYSQL) driver
 
-### Database Setup
-1. Start MySQL Server.
-2. Run `database.sql` to create the `readhub` database and its tables.
-3. Configure the application's MySQL connection settings for your local server.
-
 ### Running the Application
 1. Open `ReadHub/CMakeLists.txt` in Qt Creator.
 2. Select a compatible Qt 6 MinGW kit.
