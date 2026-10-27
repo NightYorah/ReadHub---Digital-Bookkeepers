@@ -5,6 +5,8 @@
 #include <QMessageBox>
 #include <QPixmap>
 #include <QScrollArea>
+#include <QVBoxLayout>
+#include <QWidget>
 
 ReadWindow::ReadWindow(const QString &pdfPath, QWidget *parent)
     : QMainWindow(parent)
@@ -12,13 +14,13 @@ ReadWindow::ReadWindow(const QString &pdfPath, QWidget *parent)
     setWindowTitle("PDF Reader");
     resize(1920, 1080);
 
-    readLabel = new QLabel;
-    readLabel->setAlignment(Qt::AlignCenter);
+    auto *pagesWidget = new QWidget;
+    auto *pagesLayout = new QVBoxLayout(pagesWidget);
+    pagesLayout->setAlignment(Qt::AlignHCenter);
 
     auto *scrollArea = new QScrollArea(this);
-    scrollArea->setWidget(readLabel);
-    scrollArea->setWidgetResizable(false);
-    scrollArea->setAlignment(Qt::AlignCenter);
+    scrollArea->setWidget(pagesWidget);
+    scrollArea->setWidgetResizable(true);
     setCentralWidget(scrollArea);
 
     const QByteArray pathBytes = pdfPath.toUtf8();
@@ -30,61 +32,59 @@ ReadWindow::ReadWindow(const QString &pdfPath, QWidget *parent)
         return;
     }
 
-    FPDF_PAGE page = FPDF_LoadPage(document, 0);
-    if (!page) {
-        readLabel->setText("Could not load the first page.");
-        QMessageBox::warning(this, "PDF Error", "Could not load the first page.");
-        return;
-    }
+    const int pageCount = FPDF_GetPageCount(document);
+    constexpr double scale = 1.0;  // Try 1.0 first; increase if memory allows
 
-    constexpr double scale = 2.0;
-    const int width =
-        static_cast<int>(FPDF_GetPageWidthF(page) * scale);
-    const int height =
-        static_cast<int>(FPDF_GetPageHeightF(page) * scale);
+    for (int i = 0; i < pageCount; ++i) {
+        FPDF_PAGE page = FPDF_LoadPage(document, i);
+        if (!page) {
+            continue;
+        }
 
-    if (width <= 0 || height <= 0) {
-        readLabel->setText("The first page has invalid dimensions.");
-        QMessageBox::warning(this, "PDF Error",
-                             "The first page has invalid dimensions.");
+        const int width =
+            static_cast<int>(FPDF_GetPageWidthF(page) * scale);
+        const int height =
+            static_cast<int>(FPDF_GetPageHeightF(page) * scale);
+
+        if (width <= 0 || height <= 0) {
+            FPDF_ClosePage(page);
+            continue;
+        }
+
+        FPDF_BITMAP bitmap = FPDFBitmap_Create(width, height, 1);
+        if (!bitmap) {
+            FPDF_ClosePage(page);
+            continue;
+        }
+
+        FPDFBitmap_FillRect(bitmap, 0, 0, width, height, 0xFFFFFFFF);
+        FPDF_RenderPageBitmap(bitmap, page, 0, 0, width, height, 0, 0);
+
+        const auto *pixels =
+            static_cast<const uchar *>(FPDFBitmap_GetBuffer(bitmap));
+
+        if (pixels) {
+            QImage image(
+                pixels,
+                width,
+                height,
+                FPDFBitmap_GetStride(bitmap),
+                QImage::Format_ARGB32
+                );
+
+            auto *pageLabel = new QLabel;
+            pageLabel->setAlignment(Qt::AlignCenter);
+            pageLabel->setPixmap(QPixmap::fromImage(image.copy()));
+            pagesLayout->addWidget(pageLabel);
+
+            auto *numberLabel = new QLabel(QString("Page %1").arg(i + 1));
+            numberLabel->setAlignment(Qt::AlignCenter);
+            pagesLayout->addWidget(numberLabel);
+        }
+
+        FPDFBitmap_Destroy(bitmap);
         FPDF_ClosePage(page);
-        return;
     }
-
-    FPDF_BITMAP bitmap = FPDFBitmap_Create(width, height, 1);
-    if (!bitmap) {
-        readLabel->setText("Could not create the page image.");
-        QMessageBox::warning(this, "PDF Error",
-                             "Could not create the page image.");
-        FPDF_ClosePage(page);
-        return;
-    }
-
-    FPDFBitmap_FillRect(bitmap, 0, 0, width, height, 0xFFFFFFFF);
-    FPDF_RenderPageBitmap(bitmap, page, 0, 0, width, height, 0, 0);
-
-    const auto *pixels =
-        static_cast<const uchar *>(FPDFBitmap_GetBuffer(bitmap));
-
-    if (pixels) {
-        QImage image(
-            pixels,
-            width,
-            height,
-            FPDFBitmap_GetStride(bitmap),
-            QImage::Format_ARGB32
-            );
-
-        readLabel->setPixmap(QPixmap::fromImage(image.copy()));
-        readLabel->adjustSize();
-    } else {
-        readLabel->setText("PDFium returned an empty image.");
-        QMessageBox::warning(this, "PDF Error",
-                             "PDFium returned an empty image.");
-    }
-
-    FPDFBitmap_Destroy(bitmap);
-    FPDF_ClosePage(page);
 }
 
 ReadWindow::~ReadWindow()
