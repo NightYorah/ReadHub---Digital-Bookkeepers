@@ -26,7 +26,7 @@ ReadWindow::ReadWindow(const QString &pdfPath, QWidget *parent)
     scrollArea->setAlignment(Qt::AlignCenter);
     setCentralWidget(scrollArea);
 
-    // A small helper for messages that should appear in the reader window.
+    // Creates messages incase of error checks being needed to show the user something has went wrong
     auto showMessage = [pagesLayout](const QString &message) {
         auto *messageLabel = new QLabel(message);
         pagesLayout->addWidget(messageLabel);
@@ -53,7 +53,7 @@ ReadWindow::ReadWindow(const QString &pdfPath, QWidget *parent)
     int renderedPages = 0;
     int failedPages = 0;
 
-    // Page indexes start at zero, so i = 0 is the first page.
+    // Starts at page 0 and continues to iterate until it hits the total page count
     for (int i = 0; i < pageCount; ++i) {
         FPDF_PAGE page = FPDF_LoadPage(document, i);
 
@@ -96,10 +96,10 @@ ReadWindow::ReadWindow(const QString &pdfPath, QWidget *parent)
                 QImage::Format_ARGB32
                 );
 
-            // Make the image own its pixels before destroying the PDFium bookmap.
+            // ensures the image has its pixels before cleaning them up
             image = image.copy();
 
-            // Make a small widget for this page: a page number and its image.
+            // Creates a widget for the page and other details such as pge number and for displaying images
             auto *onePageWidget = new QWidget;
             auto *onePageLayout = new QVBoxLayout(onePageWidget);
 
@@ -121,7 +121,7 @@ ReadWindow::ReadWindow(const QString &pdfPath, QWidget *parent)
             ++failedPages;
         }
 
-        // These are temporary PDFium objects for this page.
+        //Necessary cleanup
         FPDFBitmap_Destroy(bookmap);
         FPDF_ClosePage(page);
     }
@@ -133,7 +133,7 @@ ReadWindow::ReadWindow(const QString &pdfPath, QWidget *parent)
         showMessage("Some pages could not be rendered.");
     }
 
-    // Size the scroll area's contents to fit the page widgets.
+    // Fits the contents into the page widget's size
     pagesWidget->adjustSize();
 }
 
