@@ -62,8 +62,6 @@ The team will integrate and test the implemented features before merging the ite
 - Qt Creator
 - CMake
 - MinGW C++ compiler
-- MySQL Server
-- Qt MySQL (QMYSQL) driver
 
 ### Running the Application
 1. Open `ReadHub/CMakeLists.txt` in Qt Creator.
