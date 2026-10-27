@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps/pdfium-subbuild/CMakeFiles/pdfium-populate"
+		},
+		{
+			"file" : "C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps/pdfium-subbuild/CMakeFiles/pdfium-populate.rule"
+		},
+		{
+			"file" : "C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps/pdfium-subbuild/CMakeFiles/pdfium-populate-complete.rule"
+		},
+		{
+			"file" : "C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps/pdfium-subbuild/pdfium-populate-prefix/src/pdfium-populate-stamp/pdfium-populate-build.rule"
+		},
+		{
+			"file" : "C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps/pdfium-subbuild/pdfium-populate-prefix/src/pdfium-populate-stamp/pdfium-populate-configure.rule"
+		},
+		{
+			"file" : "C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps/pdfium-subbuild/pdfium-populate-prefix/src/pdfium-populate-stamp/pdfium-populate-download.rule"
+		},
+		{
+			"file" : "C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps/pdfium-subbuild/pdfium-populate-prefix/src/pdfium-populate-stamp/pdfium-populate-install.rule"
+		},
+		{
+			"file" : "C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps/pdfium-subbuild/pdfium-populate-prefix/src/pdfium-populate-stamp/pdfium-populate-mkdir.rule"
+		},
+		{
+			"file" : "C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps/pdfium-subbuild/pdfium-populate-prefix/src/pdfium-populate-stamp/pdfium-populate-patch.rule"
+		},
+		{
+			"file" : "C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps/pdfium-subbuild/pdfium-populate-prefix/src/pdfium-populate-stamp/pdfium-populate-test.rule"
+		},
+		{
+			"file" : "C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps/pdfium-subbuild/pdfium-populate-prefix/src/pdfium-populate-stamp/pdfium-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"pdfium-populate"
+		],
+		"name" : "pdfium-populate"
+	}
+}

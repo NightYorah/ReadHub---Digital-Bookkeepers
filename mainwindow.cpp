@@ -1,5 +1,7 @@
 #include "mainwindow.h"
+#include "uploadwindow.h"
 #include "./ui_mainwindow.h"
+#include "loginwindow.h"
 #include <algorithm>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -69,3 +71,20 @@ void MainWindow::onSortOptionChanged(int index)
     }
     displayBooks(sortedBooks);
 }
+void MainWindow::on_Switch2Upload_clicked()
+{
+    UploadWindow *w = new UploadWindow();
+    w->setAttribute(Qt::WA_DeleteOnClose);
+    w->show();
+    this->close();
+}
+
+
+void MainWindow::on_pushButton_clicked()
+{
+    LoginWindow *w = new LoginWindow();
+    w->setAttribute(Qt::WA_DeleteOnClose);
+    w->show();
+    this->close();
+}
+

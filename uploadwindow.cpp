@@ -4,6 +4,7 @@
 #include "QFileDialog"
 #include <fpdfview.h>
 #include "readwindow.h"
+#include "mainwindow.h"
 
 UploadWindow::UploadWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -72,3 +73,12 @@ UploadWindow::~UploadWindow()
 {
     delete ui;
 }
+
+void UploadWindow::on_Back2Main_clicked()
+{
+    MainWindow *w = new MainWindow();
+    w->setAttribute(Qt::WA_DeleteOnClose);
+    w->show();
+    this->close();
+}
+

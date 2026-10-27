@@ -38,6 +38,9 @@ public:
     explicit UploadWindow(QWidget *parent = nullptr);
     ~UploadWindow() override;
 
+private slots:
+    void on_Back2Main_clicked();
+
 private:
     ReadWindow *mMyReadWindow;
 

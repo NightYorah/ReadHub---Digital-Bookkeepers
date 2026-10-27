@@ -1,0 +1,12 @@
+# This is a generated file and its contents are an internal implementation detail.
+# The download step will be re-executed if anything in this file changes.
+# No other meaning or use of this file is supported.
+
+method=url
+command=C:/Qt/Tools/CMake_64/bin/cmake.exe;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps/pdfium-subbuild/pdfium-populate-prefix/src/pdfium-populate-stamp/download-pdfium-populate.cmake;COMMAND;C:/Qt/Tools/CMake_64/bin/cmake.exe;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps/pdfium-subbuild/pdfium-populate-prefix/src/pdfium-populate-stamp/verify-pdfium-populate.cmake;COMMAND;C:/Qt/Tools/CMake_64/bin/cmake.exe;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps/pdfium-subbuild/pdfium-populate-prefix/src/pdfium-populate-stamp/extract-pdfium-populate.cmake
+source_dir=C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps/pdfium-src
+work_dir=C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps
+url(s)=https://github.com/bblanchon/pdfium-binaries/releases/latest/download/pdfium-win-x64.tgz
+hash=
+      no_extract=
+

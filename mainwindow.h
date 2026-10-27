@@ -29,6 +29,10 @@ private slots:
     void onSearchTextChanged(const QString &text);
     void onSortOptionChanged(int index);
 
+    void on_Switch2Upload_clicked();
+
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     std::vector<BookItem> m_allBooks;
