@@ -107,14 +107,14 @@ void LoginWindow::onSignupClicked()
     {
         // fail if username matches exiswting credential
         for (const auto &credential : dummyCredentials) {
-            if (newAccountCredential.username != credential.username)
+            if (newAccountCredential.username == credential.username)
             {
-                signupSuccess();
+                signupFail();
                 return;
             }
         }
     }
-    signupFail();
+    signupSuccess();
     // TODO: MAKE WORK FOR NON-DUMMY VALUES
 }
 
