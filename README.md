@@ -13,13 +13,11 @@ ReadHub is a locally hosted digital bookshelf application that allows users to m
 - Rate books using a 5-star rating system
 - Write and manage personal reviews
 
-
 ## Technology Stack
 
-- **Programming Languages:** C++, JavaScript
+- **Programming Languages:** C++
 - **Frontend:** Qt
 - **Backend:** Qt / C++
-- **Database:** MySQL
 
 ## Team Members
 
@@ -46,13 +44,11 @@ main — main project branch.
 
 iteration_1 — shared branch for the first development iteration.
 
-Individual development branches (such as qt-mysql-integration) — used for implementing assigned tasks.
+Individual development branches (such as iteration_1) — used for implementing assigned tasks, separating versions and keeping the code base clean.
 
-Team members develop and commit their changes on separate branches using descriptive commit messages.
+Team members develop and commit their changes on separate branches, depending on iteration or member need.
 
-Completed work is submitted through pull requests for review before being merged into iteration_1.
-
-The team will integrate and test the implemented features before merging the iteration into main.
+Completed work is submitted into each iteration branch, code is then reviewed and cross-checked before being merged into main.
 
 ## Setup and Running Instructions
 
@@ -68,9 +64,8 @@ The team will integrate and test the implemented features before merging the ite
 2. Select a compatible Qt 6 MinGW kit.
 3. Configure and build the project.
 4. Run the application from Qt Creator.
-5. Verify that the application connects successfully to MySQL.
 
-**Note:** The application is still under development. Additional setup instructions may be needed as features are integrated.
+**Note:** The application is still under development. Additional setup instructions may be needed as features are integrated. Many features may not be available until later iterations.
 
 ## Testing
 
@@ -82,7 +77,6 @@ Automated tests are being prepared as part of Iteration 1. The exact commands fo
 
 ### Initial Testing Areas
 
-- Database connection and book information storage
 - User registration and login
 - PDF upload and reading
 - Bookshelf display and search
