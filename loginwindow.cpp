@@ -10,6 +10,7 @@ LoginWindow::LoginWindow(QWidget *parent)
     ui->setupUi(this);
 
     loadEmptyCredential();
+    newAccountCredential = {"", ""}; //set the new account credential as empty
     loadDummyCredentials();
 
     // signal connections
@@ -35,6 +36,7 @@ LoginWindow::~LoginWindow()
 void LoginWindow::loadEmptyCredential()
 {
     loginCredential = {"", ""};
+    newAccountCredential = {"", ""}; //set the new account credential as empty
 }
 
 void LoginWindow::loadDummyCredentials()
@@ -102,8 +104,12 @@ void LoginWindow::onNewPasswordEntered(const QString &text)
 
 void LoginWindow::onSignupClicked()
 {
+    // get the input from the editor
+    newAccountCredential.username = ui->signupUsernameLineEdit->text();
+    newAccountCredential.password = ui->signupPasswordLineEdit->text();
+
     // fail if username or password are blank
-    if (newAccountCredential.username != "" || newAccountCredential.password != "")
+    if (!newAccountCredential.username.isEmpty() && !newAccountCredential.password.isEmpty())
     {
         // fail if username matches exiswting credential
         for (const auto &credential : dummyCredentials) {
@@ -114,7 +120,7 @@ void LoginWindow::onSignupClicked()
             }
         }
         signupSuccess();
-        return
+        return;
     }
     signupFail();
     // TODO: MAKE WORK FOR NON-DUMMY VALUES

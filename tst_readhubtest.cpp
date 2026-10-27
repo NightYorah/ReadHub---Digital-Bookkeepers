@@ -114,30 +114,50 @@ void ReadHubTest::testSignupSuccessWithNewCredentials()
 // Test sign up with blank credentials failure
 void ReadHubTest::testSignupFailureWithBlankCredentials()
 {
-    LoginWindow loginWin;
-    loginWin.show();
+    LoginWindow *loginWin = new LoginWindow();
+    loginWin->show();
 
-    QList<QLineEdit*> editors = loginWin.findChildren<QLineEdit*>();
-    QList<QPushButton*> buttons = loginWin.findChildren<QPushButton*>();
+    QLineEdit *usernameEdit = loginWin->findChild<QLineEdit*>("signupUsernameLineEdit");
+    QLineEdit *passwordEdit = loginWin->findChild<QLineEdit*>("signupPasswordLineEdit");
+    QPushButton *signupBtn = loginWin->findChild<QPushButton*>("signupPushButton");
+    QLabel *failLabel = loginWin->findChild<QLabel*>("signupFailLabel");
 
-    if (editors.size() >= 4 && buttons.size() >= 2) {
-        editors[2]->clear();
-        editors[3]->clear();
-        QTest::keyClicks(editors[3], "password123");
+    QVERIFY(usernameEdit != nullptr);
+    QVERIFY(passwordEdit != nullptr);
+    QVERIFY(signupBtn != nullptr);
+    QVERIFY(failLabel != nullptr);
 
-        QTest::mouseClick(buttons[1], Qt::LeftButton);
+    // Case1: both two editor are empty
+    usernameEdit->clear();
+    passwordEdit->clear();
+    emit usernameEdit->textEdited("");
+    emit passwordEdit->textEdited("");
+    QTest::mouseClick(signupBtn, Qt::LeftButton);
 
-        bool hasErrorMessage = false;
-        for (QLabel *label : loginWin.findChildren<QLabel*>()) {
-            if (label->text().contains("Username unavailable")) {
-                hasErrorMessage = true;
-                break;
-            }
-        }
-        QVERIFY2(hasErrorMessage, "Expected 'Username unavailable' label when signing up with blank username.");
-    } else {
-        QFAIL("Could not find input fields or buttons.");
-    }
+    bool hasErrorMessage1 = failLabel->text().contains("Username unavailable", Qt::CaseInsensitive);
+    QVERIFY2(hasErrorMessage1, "Failed: Both username and password are blank");
+
+    // Case2: Username is empty, password is not empty
+    usernameEdit->clear();
+    passwordEdit->clear();
+    emit usernameEdit->textEdited("");
+    QTest::keyClicks(passwordEdit, "123456");
+    QTest::mouseClick(signupBtn, Qt::LeftButton);
+
+    bool hasErrorMessage2 = failLabel->text().contains("Username unavailable", Qt::CaseInsensitive);
+    QVERIFY2(hasErrorMessage2, "Failed: Username is blank but password is provided");
+
+    // Case3: Password is empty, username is not empty
+    usernameEdit->clear();
+    passwordEdit->clear();
+    QTest::keyClicks(usernameEdit, "newuser999");
+    emit passwordEdit->textEdited("");
+    QTest::mouseClick(signupBtn, Qt::LeftButton);
+
+    bool hasErrorMessage3 = failLabel->text().contains("Username unavailable", Qt::CaseInsensitive);
+    QVERIFY2(hasErrorMessage3, "Failed: Password is blank but username is provided");
+
+    delete loginWin;
 }
 
 // Test sign up with existing credentials failure
