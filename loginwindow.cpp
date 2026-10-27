@@ -103,7 +103,7 @@ void LoginWindow::onNewPasswordEntered(const QString &text)
 void LoginWindow::onSignupClicked()
 {
     // fail if username or password are blank
-    if (newAccountCredential.username != "" && newAccountCredential.password != "")
+    if (newAccountCredential.username != "" || newAccountCredential.password != "")
     {
         // fail if username matches exiswting credential
         for (const auto &credential : dummyCredentials) {
@@ -113,8 +113,10 @@ void LoginWindow::onSignupClicked()
                 return;
             }
         }
+        signupSuccess();
+        return
     }
-    signupSuccess();
+    signupFail();
     // TODO: MAKE WORK FOR NON-DUMMY VALUES
 }
 
