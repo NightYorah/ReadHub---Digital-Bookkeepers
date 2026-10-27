@@ -1,7 +1,0 @@
-set(__QT_DEPLOY_TARGETS "ReadHub;ReadHubTest")
-set(__QT_DEPLOY_TARGET_ReadHub_FILE C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/ReadHub.exe)
-set(__QT_DEPLOY_TARGET_ReadHub_TYPE EXECUTABLE)
-set(__QT_DEPLOY_TARGET_ReadHub_RUNTIME_DLLS C:/Qt/6.12.0/mingw_64/bin/Qt6Widgets.dll;C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps/pdfium-src/bin/pdfium.dll;C:/Qt/6.12.0/mingw_64/bin/Qt6Gui.dll;C:/Qt/6.12.0/mingw_64/bin/Qt6Core.dll)
-set(__QT_DEPLOY_TARGET_ReadHubTest_FILE C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/ReadHubTest.exe)
-set(__QT_DEPLOY_TARGET_ReadHubTest_TYPE EXECUTABLE)
-set(__QT_DEPLOY_TARGET_ReadHubTest_RUNTIME_DLLS C:/Qt/6.12.0/mingw_64/bin/Qt6Widgets.dll;C:/Qt/6.12.0/mingw_64/bin/Qt6Test.dll;C:/Users/gyasi/Desktop/ReadHub/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/_deps/pdfium-src/bin/pdfium.dll;C:/Qt/6.12.0/mingw_64/bin/Qt6Gui.dll;C:/Qt/6.12.0/mingw_64/bin/Qt6Core.dll)
