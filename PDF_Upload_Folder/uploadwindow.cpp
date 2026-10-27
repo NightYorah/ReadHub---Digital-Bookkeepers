@@ -52,6 +52,8 @@ UploadWindow::UploadWindow(QWidget *parent)
         return;
     }
 
+    const int pageCount = FPDF_GetPageCount(book);
+
 
     FPDF_CloseDocument(book);
 
