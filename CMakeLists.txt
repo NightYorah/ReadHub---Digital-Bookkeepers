@@ -9,20 +9,25 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Test)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Test)
 
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        loginwindow.cpp
+        loginwindow.h
+        loginwindow.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(ReadHub
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ReadHub APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -67,4 +72,27 @@ install(TARGETS ReadHub
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(ReadHub)
+endif()
+# Enable testing
+enable_testing()
+
+add_executable(ReadHubTest
+    tst_readhubtest.cpp
+    mainwindow.cpp
+    mainwindow.h
+    mainwindow.ui
+    loginwindow.cpp
+    loginwindow.h
+    loginwindow.ui
+)
+
+target_link_libraries(ReadHubTest PRIVATE
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::Test
+)
+
+add_test(NAME ReadHubTest COMMAND ReadHubTest)
+
+if(QT_VERSION_MAJOR EQUAL 6)
+    qt_finalize_executable(ReadHubTest)
 endif()
