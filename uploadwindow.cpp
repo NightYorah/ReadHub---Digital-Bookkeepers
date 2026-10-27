@@ -18,7 +18,7 @@ UploadWindow::UploadWindow(QWidget *parent)
         window->show();
     });
 
-
+//Hides these buttons until they are needed
     ui->Quick_PDF->hide();
     ui->Back2Main->hide();
 
@@ -31,13 +31,8 @@ UploadWindow::UploadWindow(QWidget *parent)
     connect(ui->Upload_Button, &QPushButton::clicked, this, [this]{
         const QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a PDF"), QString(), tr ("PDF Files (*.pdf)"));
 
-
+//If no file is selected, goes back to the upload menu
     if(fileName.isEmpty())
-    {
-        ui->Back2Main->show();
-        return;
-    }
-    else
     {
         ui->Back2Main->show();
     }
@@ -47,6 +42,7 @@ UploadWindow::UploadWindow(QWidget *parent)
 
     ui->Quick_PDF->show();
 
+    //Error message for a PDF not being loaded correctly
     if(!book)
     {
         QMessageBox::warning(this, tr("PDF ERROR"), tr("Could not open the PDF"));
@@ -58,12 +54,6 @@ UploadWindow::UploadWindow(QWidget *parent)
 
     FPDF_CloseDocument(book);
 
-    //file path needs to be stored for later use
-    //After file upload, give success screen
-    //Fall back to main library page
-    //when library book clicked, open book on its first page
-    //be able to click thru all pages until end, then go back to lib main page or book overview screen
-
     ui->File_Path->setText(fileName);
     }
     );
@@ -74,6 +64,7 @@ UploadWindow::~UploadWindow()
     delete ui;
 }
 
+//Allows the user to navigate back to the main menu
 void UploadWindow::on_Back2Main_clicked()
 {
     MainWindow *w = new MainWindow();
