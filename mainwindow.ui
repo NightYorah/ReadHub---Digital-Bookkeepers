@@ -46,6 +46,20 @@
      </widget>
     </item>
     <item>
+     <widget class="QPushButton" name="Switch2Upload">
+      <property name="text">
+       <string>Upload PDF</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>Logout</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QListWidget" name="bookListWidget">
       <property name="locale">
        <locale language="English" country="AmericanSamoa"/>
@@ -60,7 +74,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>30</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>
