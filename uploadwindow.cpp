@@ -22,7 +22,7 @@ UploadWindow::UploadWindow(QWidget *parent)
     config.version = 2;
     FPDF_InitLibraryWithConfig(&config);
 
-
+    //START HERE FOR TESTING, THIS OVERALL FUNCTION OPENS A FILE PATH AND SAVES IT AND ITS METADATA
     //When Upload_Button pressed, opens file explorer
     connect(ui->Upload_Button, &QPushButton::clicked, this, [this]{
         fileName = QFileDialog::getOpenFileName(this, tr("Choose a PDF"), QString(), tr ("PDF Files (*.pdf)"));
@@ -36,7 +36,7 @@ UploadWindow::UploadWindow(QWidget *parent)
         return;
     }
 
-    const QByteArray pathBytes = fileName.toUtf8();
+    const QByteArray pathBytes = fileName.toUtf8(); //translates the file path into raw bytes as FPDF_LoadDocument does not accept QStrings
     FPDF_DOCUMENT book = FPDF_LoadDocument(pathBytes.constData(), nullptr);
 
     //Error message for a PDF not being loaded correctly
@@ -50,6 +50,7 @@ UploadWindow::UploadWindow(QWidget *parent)
     journey = FileUpload();
     journey.filePath = fileName;
 
+    //PART OF THE TESTING COULD INCLUDE HOW THE METADATA ISN'T GRABBED PROPERLY
     //Grabs the metadata of the PDF, allowing us to display the author, title, etc automatically instead of manual input
     unsigned long len = FPDF_GetMetaText(book, "Title", nullptr, 0);
     if (len > 2)
@@ -78,6 +79,7 @@ UploadWindow::UploadWindow(QWidget *parent)
     }
     );
 
+    //TESTING COULD INCLUDE SEEING HOW METADATA IS CARRIED ACROSS WINDOWS, THIS APPEND IS CONNECTED TO A LIST MADE IN uploadwindow.h (book_metadata)
     //This pushes all the metadata to the mainwindow.cpp side of the application for it to be able to access it
     connect(ui->Load_FP, &QPushButton::clicked, this, [this]()
     {
@@ -96,6 +98,7 @@ UploadWindow::~UploadWindow()
 }
 
 //Allows the user to navigate back to the main menu
+//THIS IS WHERE THE LIST IN uploadwindow.h IS CONNECTED TO THE LIST IN mainwindow.h (setBooks)
 void UploadWindow::on_Back2Main_clicked()
 {
     MainWindow *w = new MainWindow();

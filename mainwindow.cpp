@@ -48,6 +48,7 @@ void MainWindow::displayBooks(const std::vector<BookItem>& books)
         item->setSizeHint(btn->sizeHint());
         ui->bookListWidget->setItemWidget(item, btn);
 
+        //Added functionality of reading a book from main window library
         const QString path = book.path;
         connect(btn, &QPushButton::clicked, this, [path] {
             if (path.isEmpty()) return;   // dummy books have no file
@@ -102,6 +103,8 @@ void MainWindow::on_pushButton_clicked()
     this->close();
 }
 
+//Added functionality of creating a new library item when a PDF is uploaded
+//TESTING COULD INCLUDE THE METADATA STORED (correctly or not) AND HOW IT IS NOT SAVED PERMANENTLY
 void MainWindow::setBooks(const QList<FileUpload> &books)
 {
     for (const FileUpload &item : books)
