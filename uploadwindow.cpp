@@ -50,6 +50,7 @@ UploadWindow::UploadWindow(QWidget *parent)
     journey = FileUpload();
     journey.filePath = fileName;
 
+    //Grabs the metadata of the PDF, allowing us to display the author, title, etc automatically instead of manual input
     unsigned long len = FPDF_GetMetaText(book, "Title", nullptr, 0);
     if (len > 2)
     {
@@ -77,6 +78,7 @@ UploadWindow::UploadWindow(QWidget *parent)
     }
     );
 
+    //This pushes all the metadata to the mainwindow.cpp side of the application for it to be able to access it
     connect(ui->Load_FP, &QPushButton::clicked, this, [this]()
     {
 
