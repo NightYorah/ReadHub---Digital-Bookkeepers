@@ -3,12 +3,15 @@
 
 #include <QMainWindow>
 #include <vector>
+#include <QList>
+#include "uploadwindow.h"
 
 struct BookItem{
     QString title;
     QString author;
     QString date;
     double rating;
+    QString path;
 };
 
 QT_BEGIN_NAMESPACE
@@ -39,5 +42,8 @@ private:
 
     void loadDummyData();
     void displayBooks(const std::vector<BookItem>& books);
+
+public:
+    void setBooks(const QList<FileUpload> &books);
 };
 #endif // MAINWINDOW_H

@@ -3,6 +3,8 @@
 #include "./ui_mainwindow.h"
 #include "loginwindow.h"
 #include <algorithm>
+#include <QPushButton>
+#include "readwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -41,9 +43,21 @@ void MainWindow::displayBooks(const std::vector<BookItem>& books)
         QString displayText = QString("%1  |  Author: %2  |  Date: %3 | Rating: %4 ★")
             .arg(book.title, book.author, book.date)
             .arg(QString::number(book.rating, 'f', 1));
-        ui->bookListWidget->addItem(displayText);
+        QListWidgetItem *item = new QListWidgetItem(ui->bookListWidget);
+        QPushButton *btn = new QPushButton(displayText);
+        item->setSizeHint(btn->sizeHint());
+        ui->bookListWidget->setItemWidget(item, btn);
+
+        const QString path = book.path;
+        connect(btn, &QPushButton::clicked, this, [path] {
+            if (path.isEmpty()) return;   // dummy books have no file
+            auto *window = new ReadWindow(path);
+            window->setAttribute(Qt::WA_DeleteOnClose);
+            window->show();
+        });
     }
 }
+
 
 void MainWindow::onSearchTextChanged(const QString &text)
 {
@@ -87,4 +101,19 @@ void MainWindow::on_pushButton_clicked()
     w->show();
     this->close();
 }
+
+void MainWindow::setBooks(const QList<FileUpload> &books)
+{
+    for (const FileUpload &item : books)
+    {
+        BookItem b;
+        b.title  = item.book_title.isEmpty() ? item.filePath : item.book_title;
+        b.author = item.book_author;
+        b.rating = 0.0;
+        b.path   = item.filePath;
+        m_allBooks.push_back(b);
+    }
+    displayBooks(m_allBooks);
+}
+
 

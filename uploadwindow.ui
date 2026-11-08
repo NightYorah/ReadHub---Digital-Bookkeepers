@@ -23,8 +23,8 @@
    <widget class="QPushButton" name="Upload_Button">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>160</y>
+      <x>330</x>
+      <y>150</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -40,9 +40,9 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>220</y>
-      <width>311</width>
-      <height>41</height>
+      <y>210</y>
+      <width>451</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="whatsThis">
@@ -52,23 +52,23 @@
      <string>File_Path</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="Quick_PDF">
+   <widget class="QPushButton" name="Load_FP">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>220</x>
       <y>290</y>
       <width>111</width>
       <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>Open PDF</string>
+     <string>Load PDF</string>
     </property>
    </widget>
    <widget class="QPushButton" name="Back2Main">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>470</x>
       <y>290</y>
       <width>121</width>
       <height>41</height>

@@ -23,6 +23,7 @@ struct FileUpload
     QString book_author;
     QString book_publisher;
     QString publish_date;
+    QString filePath;
 };
 
 class UploadWindow : public QMainWindow
@@ -47,8 +48,13 @@ private:
 private:
     Ui::UploadWindow *ui;
 
+private:
+    QString fileName;
 
 private:
+    FileUpload journey;
+
+public:
     QList<FileUpload> book_metadata;
 };
 
