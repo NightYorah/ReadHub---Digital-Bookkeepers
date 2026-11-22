@@ -2,17 +2,25 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QString>
 #include <vector>
 #include <QList>
 #include "uploadwindow.h"
 
+struct UserReview {
+    QString username;
+    int rating;
+    QString comment;
+    QString date;
+};
 
-struct BookItem{
+struct BookItem {
     QString title;
     QString author;
     QString date;
     double rating;
     QString path;
+    QList<UserReview> reviews;
 };
 
 QT_BEGIN_NAMESPACE
@@ -51,7 +59,9 @@ private:
     QString libraryFilePath() const;
     void saveLibrary() const;
     void loadLibrary();
+    void saveAllReviews() const;
+    void loadAllReviews();
 
 };
-
 #endif // MAINWINDOW_H
+
