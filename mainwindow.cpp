@@ -5,6 +5,14 @@
 #include <algorithm>
 #include <QPushButton>
 #include "readwindow.h"
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QStandardPaths>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -12,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     loadDummyData();
+    loadLibrary();
     displayBooks(m_allBooks);
 
     connect(ui->searchLineEdit, &QLineEdit::textChanged,
@@ -116,7 +125,68 @@ void MainWindow::setBooks(const QList<FileUpload> &books)
         b.path   = item.filePath;
         m_allBooks.push_back(b);
     }
+    saveLibrary();
     displayBooks(m_allBooks);
 }
 
+QString MainWindow::libraryFilePath() const
+{
+    const QString dir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDir().mkpath(dir);
+    return dir + "/library.json";
+}
+
+void MainWindow::saveLibrary() const
+{
+    QJsonArray arr;
+    for (const BookItem &b : m_allBooks)
+    {
+        if (b.path.isEmpty())
+        {
+            continue;
+        }
+        QJsonObject o;
+        o["title"] = b.title;
+        o["author"] = b.author;
+        o["date"] = b.date;
+        o["rating"] = b.rating;
+        o["path"] = b.path;
+        arr.append(o);
+    }
+    QFile f(libraryFilePath());
+    if(f.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    {
+        f.write(QJsonDocument(arr).toJson(QJsonDocument::Indented));
+    }
+}
+
+void MainWindow::loadLibrary()
+{
+    QFile f(libraryFilePath());
+    if(!f.open(QIODevice::ReadOnly))
+    {
+        return;
+    }
+    const QJsonDocument doc = QJsonDocument::fromJson(f.readAll());
+    if(!doc.isArray())
+    {
+        return;
+    }
+    for (const QJsonValue &v : doc.array())
+    {
+        const QJsonObject o = v.toObject();
+        BookItem b;
+        b.title  = o["title"].toString();
+        b.author = o["author"].toString();
+        b.date   = o["date"].toString();
+        b.rating = o["rating"].toDouble();
+        b.path   = o["path"].toString();
+
+        if(!QFileInfo::exists(b.path))
+        {
+            continue;
+        }
+        m_allBooks.push_back(b);
+    }
+}
 

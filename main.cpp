@@ -11,4 +11,6 @@ int main(int argc, char *argv[])
     LoginWindow w;
     w.show();
     return QApplication::exec();
+    QCoreApplication::setOrganizationName("YourOrg");
+    QCoreApplication::setApplicationName("LibraryApp");
 }

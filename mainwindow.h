@@ -6,6 +6,7 @@
 #include <QList>
 #include "uploadwindow.h"
 
+
 struct BookItem{
     QString title;
     QString author;
@@ -45,5 +46,12 @@ private:
 
 public:
     void setBooks(const QList<FileUpload> &books);
+
+private:
+    QString libraryFilePath() const;
+    void saveLibrary() const;
+    void loadLibrary();
+
 };
+
 #endif // MAINWINDOW_H
