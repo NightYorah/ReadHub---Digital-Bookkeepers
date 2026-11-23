@@ -1,25 +1,25 @@
 #include "mainwindow.h"
-#include "uploadwindow.h"
 #include "./ui_mainwindow.h"
+#include "StarRatingWidget.h"
 #include "loginwindow.h"
 #include "readwindow.h"
-#include "StarRatingWidget.h"
+#include "uploadwindow.h"
 
-#include <algorithm>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QTextEdit>
-#include <QMessageBox>
 #include <QDateTime>
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QStandardPaths>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QHBoxLayout>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QLabel>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QStandardPaths>
+#include <QTextEdit>
+#include <QVBoxLayout>
+#include <algorithm>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -31,11 +31,12 @@ MainWindow::MainWindow(QWidget *parent)
     loadAllReviews(); //load all books' comments and ratings
     displayBooks(m_allBooks);
 
-    connect(ui->searchLineEdit, &QLineEdit::textChanged,
-        this, &MainWindow::onSearchTextChanged);
+    connect(ui->searchLineEdit, &QLineEdit::textChanged, this, &MainWindow::onSearchTextChanged);
 
-    connect(ui->sortComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
-        this, &MainWindow::onSortOptionChanged);
+    connect(ui->sortComboBox,
+            QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this,
+            &MainWindow::onSortOptionChanged);
 }
 
 MainWindow::~MainWindow()
@@ -45,28 +46,39 @@ MainWindow::~MainWindow()
 
 void MainWindow::loadDummyData()
 {
-    m_allBooks = {
-        {"Harry Potter", "J.K. Rowling", "1997-06-26", 4.9, "", {
-            {"testuser123", 5, "A timeless classic! World-building is incredible.", "2026-11-15"},
-            {"a", 4, "Great pacing and memorable characters.", "2026-11-18"}
-            }},
-        {"Jane Eyre", "Charlotte Brontë", "1847-10-16", 4.5, "", {
-            {"testuser123", 5, "Deeply moving story with strong themes.", "2026-11-12"}
-            }},
-        {"Wuthering Heights", "Emily Brontë", "1847-12-01", 4.3, "", {
-            {"Bob", 4, "Dark, intense, and unforgettable.", "2026-11-14"}
-            }},
-        {"Gone with the Wind", "Margaret Mitchell", "1936-06-30", 4.8, "", {
-            {"testuser123", 5, "Epic historical fiction, very engaging.", "2026-11-19"}
-            }}
-    };
+    m_allBooks
+        = {{"Harry Potter",
+            "J.K. Rowling",
+            "1997-06-26",
+            4.9,
+            "",
+            {{"testuser123", 5, "A timeless classic! World-building is incredible.", "2026-11-15"},
+             {"a", 4, "Great pacing and memorable characters.", "2026-11-18"}}},
+           {"Jane Eyre",
+            "Charlotte Brontë",
+            "1847-10-16",
+            4.5,
+            "",
+            {{"testuser123", 5, "Deeply moving story with strong themes.", "2026-11-12"}}},
+           {"Wuthering Heights",
+            "Emily Brontë",
+            "1847-12-01",
+            4.3,
+            "",
+            {{"Bob", 4, "Dark, intense, and unforgettable.", "2026-11-14"}}},
+           {"Gone with the Wind",
+            "Margaret Mitchell",
+            "1936-06-30",
+            4.8,
+            "",
+            {{"testuser123", 5, "Epic historical fiction, very engaging.", "2026-11-19"}}}};
 }
 
-void MainWindow::displayBooks(const std::vector<BookItem>& books)
+void MainWindow::displayBooks(const std::vector<BookItem> &books)
 {
     ui->bookListWidget->clear();
 
-    for (const auto& book : books) {
+    for (const auto &book : books) {
         QListWidgetItem *item = new QListWidgetItem(ui->bookListWidget);
 
         QWidget *rowContainer = new QWidget();
@@ -79,25 +91,27 @@ void MainWindow::displayBooks(const std::vector<BookItem>& books)
         topBar->setSpacing(4);
 
         QString displayText = QString("%1  |  Author: %2  |  Date: %3 | Rating: %4 ★")
-            .arg(book.title, book.author, book.date)
-            .arg(QString::number(book.rating, 'f', 1));
+                                  .arg(book.title, book.author, book.date)
+                                  .arg(QString::number(book.rating, 'f', 1));
 
         QPushButton *btn = new QPushButton(displayText);
         btn->setStyleSheet("QPushButton { text-align: left; padding: 6px 10px; }");
         topBar->addWidget(btn, 1);
 
         QPushButton *reviewToggleBtn = new QPushButton(
-            QString("Reviews (%1) ▼").arg(book.reviews.size())
-            );
+            QString("Reviews (%1) ▼").arg(book.reviews.size()));
         reviewToggleBtn->setStyleSheet(
-            "QPushButton { padding: 6px 10px; background-color: #fff8e7; border: 1px solid #f39c12; border-radius: 3px; color: #d35400; font-weight: bold; }");
+            "QPushButton { padding: 6px 10px; background-color: #fff8e7; border: 1px solid "
+            "#f39c12; border-radius: 3px; color: #d35400; font-weight: bold; }");
+        reviewToggleBtn->setObjectName("reviewToggleBtn");
         topBar->addWidget(reviewToggleBtn);
         rowLayout->addLayout(topBar);
 
         // Added functionality of reading a book from main window library
         const QString path = book.path;
         connect(btn, &QPushButton::clicked, this, [path] {
-            if (path.isEmpty()) return;   // dummy books have no file
+            if (path.isEmpty())
+                return; // dummy books have no file
             auto *window = new ReadWindow(path);
             window->setAttribute(Qt::WA_DeleteOnClose);
             window->show();
@@ -106,10 +120,12 @@ void MainWindow::displayBooks(const std::vector<BookItem>& books)
         // book widget: tos how others comments, rating, and comment box
         QWidget *drawer = new QWidget();
         drawer->setVisible(false);
-        drawer->setStyleSheet("background-color: #f9f9f9; border: 1px solid #dcdde1; border-top: none;");
+        drawer->setStyleSheet(
+            "border: 1px solid #dcdde1; border-top: none;");
         QVBoxLayout *drawerLayout = new QVBoxLayout(drawer);
         drawerLayout->setContentsMargins(12, 8, 12, 10);
         drawerLayout->setSpacing(6);
+        drawerLayout->setObjectName("bookWidget");
 
         QLabel *othersHeader = new QLabel("<b>Other Users' Ratings & Reviews:</b>");
         drawerLayout->addWidget(othersHeader);
@@ -120,11 +136,12 @@ void MainWindow::displayBooks(const std::vector<BookItem>& books)
             othersContent->setText("No reviews yet. Be the first to rate!");
         } else {
             QStringList lines;
-            for (const auto& r : book.reviews) {
+            for (const auto &r : book.reviews) {
                 int c = qBound(0, r.rating, 5);
                 QString stars = QString("★").repeated(c) + QString("☆").repeated(5 - c);
                 QString commentStr = r.comment.isEmpty() ? "(Rating only)" : r.comment;
-                lines << QString("• <b>%1</b> [%2] (%3): %4").arg(r.username, stars, r.date, commentStr);
+                lines << QString("• <b>%1</b> [%2] (%3): %4")
+                             .arg(r.username, stars, r.date, commentStr);
             }
             othersContent->setText(lines.join("<br>"));
         }
@@ -134,6 +151,7 @@ void MainWindow::displayBooks(const std::vector<BookItem>& books)
         QHBoxLayout *starRow = new QHBoxLayout();
         starRow->addWidget(new QLabel("<b>Your Rating:</b>"));
         StarRatingWidget *starWidget = new StarRatingWidget();
+        starWidget->setObjectName("stars");
         starRow->addWidget(starWidget);
         starRow->addStretch();
         drawerLayout->addLayout(starRow);
@@ -148,44 +166,52 @@ void MainWindow::displayBooks(const std::vector<BookItem>& books)
         QHBoxLayout *submitRow = new QHBoxLayout();
         submitRow->addStretch();
         QPushButton *submitBtn = new QPushButton("Submit Review");
-        submitBtn->setStyleSheet("background-color: #2980b9; color: white; font-weight: bold; padding: 4px 12px;");
+        submitBtn->setStyleSheet(
+            "background-color: #2980b9; color: white; font-weight: bold; padding: 4px 12px;");
         submitRow->addWidget(submitBtn);
         drawerLayout->addLayout(submitRow);
 
         rowLayout->addWidget(drawer);
 
         // unfold/fold widget
-        connect(reviewToggleBtn, &QPushButton::clicked, this, [drawer, reviewToggleBtn, rowContainer, item, count = book.reviews.size()]() {
-            bool show = !drawer->isVisible();
-            drawer->setVisible(show);
-            reviewToggleBtn->setText(QString("Reviews (%1) %2").arg(count).arg(show ? "▲" : "▼"));
-            rowContainer->adjustSize();
-            item->setSizeHint(rowContainer->sizeHint());
-        });
+        connect(reviewToggleBtn,
+                &QPushButton::clicked,
+                this,
+                [drawer, reviewToggleBtn, rowContainer, item, count = book.reviews.size()]() {
+                    bool show = !drawer->isVisible();
+                    drawer->setVisible(show);
+                    reviewToggleBtn->setText(
+                        QString("Reviews (%1) %2").arg(count).arg(show ? "▲" : "▼"));
+                    rowContainer->adjustSize();
+                    item->setSizeHint(rowContainer->sizeHint());
+                });
 
         // submit new comments and ratings
         const QString bookTitle = book.title;
         connect(submitBtn, &QPushButton::clicked, this, [this, bookTitle, starWidget, commentBox]() {
             int chosenStars = starWidget->rating();
             if (chosenStars == 0) {
-                QMessageBox::warning(this, "Rating Required", "Please click on the stars (1 to 5) to rate.");
+                QMessageBox::warning(this,
+                                     "Rating Required",
+                                     "Please click on the stars (1 to 5) to rate.");
                 return;
             }
             QString reviewText = commentBox->toPlainText().trimmed();
             QString today = QDateTime::currentDateTime().toString("yyyy-MM-dd");
 
-            for (auto& b : m_allBooks) {
+            for (auto &b : m_allBooks) {
                 if (b.title == bookTitle) {
                     b.reviews.append({"User", chosenStars, reviewText, today});
                     double sum = 0;
-                    for (const auto& r : b.reviews) sum += r.rating;
+                    for (const auto &r : b.reviews)
+                        sum += r.rating;
                     b.rating = sum / b.reviews.size();
                     break;
                 }
             }
 
-            saveLibrary();     // upload json document ratings
-            saveAllReviews();  // save reciews
+            saveLibrary();    // upload json document ratings
+            saveAllReviews(); // save reciews
             displayBooks(m_allBooks);
         });
 
@@ -197,7 +223,7 @@ void MainWindow::displayBooks(const std::vector<BookItem>& books)
 void MainWindow::onSearchTextChanged(const QString &text)
 {
     std::vector<BookItem> filteredBooks;
-    for (const auto& book : m_allBooks) {
+    for (const auto &book : m_allBooks) {
         if (text.isEmpty() || book.title.contains(text, Qt::CaseInsensitive)) {
             filteredBooks.push_back(book);
         }
@@ -209,12 +235,11 @@ void MainWindow::onSortOptionChanged(int index)
 {
     std::vector<BookItem> sortedBooks = m_allBooks;
     if (index == 0) { // Title (A-Z)
-        std::sort(sortedBooks.begin(), sortedBooks.end(), [](const BookItem& a, const BookItem& b){
+        std::sort(sortedBooks.begin(), sortedBooks.end(), [](const BookItem &a, const BookItem &b) {
             return a.title < b.title;
         });
-    }
-    else if (index == 1) { // Rating (five stars)
-        std::sort(sortedBooks.begin(), sortedBooks.end(), [](const BookItem& a, const BookItem& b){
+    } else if (index == 1) { // Rating (five stars)
+        std::sort(sortedBooks.begin(), sortedBooks.end(), [](const BookItem &a, const BookItem &b) {
             return a.rating > b.rating;
         });
     }
@@ -239,13 +264,12 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::setBooks(const QList<FileUpload> &books)
 {
-    for (const FileUpload &item : books)
-    {
+    for (const FileUpload &item : books) {
         BookItem b;
-        b.title  = item.book_title.isEmpty() ? item.filePath : item.book_title;
+        b.title = item.book_title.isEmpty() ? item.filePath : item.book_title;
         b.author = item.book_author;
         b.rating = 0.0;
-        b.path   = item.filePath;
+        b.path = item.filePath;
         m_allBooks.push_back(b);
     }
     saveLibrary();
@@ -263,10 +287,8 @@ QString MainWindow::libraryFilePath() const
 void MainWindow::saveLibrary() const
 {
     QJsonArray arr;
-    for (const BookItem &b : m_allBooks)
-    {
-        if (b.path.isEmpty())
-        {
+    for (const BookItem &b : m_allBooks) {
+        if (b.path.isEmpty()) {
             continue;
         }
         QJsonObject o;
@@ -278,8 +300,7 @@ void MainWindow::saveLibrary() const
         arr.append(o);
     }
     QFile f(libraryFilePath());
-    if(f.open(QIODevice::WriteOnly | QIODevice::Truncate))
-    {
+    if (f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         f.write(QJsonDocument(arr).toJson(QJsonDocument::Indented));
     }
 }
@@ -287,27 +308,23 @@ void MainWindow::saveLibrary() const
 void MainWindow::loadLibrary()
 {
     QFile f(libraryFilePath());
-    if(!f.open(QIODevice::ReadOnly))
-    {
+    if (!f.open(QIODevice::ReadOnly)) {
         return;
     }
     const QJsonDocument doc = QJsonDocument::fromJson(f.readAll());
-    if(!doc.isArray())
-    {
+    if (!doc.isArray()) {
         return;
     }
-    for (const QJsonValue &v : doc.array())
-    {
+    for (const QJsonValue &v : doc.array()) {
         const QJsonObject o = v.toObject();
         BookItem b;
-        b.title  = o["title"].toString();
+        b.title = o["title"].toString();
         b.author = o["author"].toString();
-        b.date   = o["date"].toString();
+        b.date = o["date"].toString();
         b.rating = o["rating"].toDouble();
-        b.path   = o["path"].toString();
+        b.path = o["path"].toString();
 
-        if(!QFileInfo::exists(b.path))
-        {
+        if (!QFileInfo::exists(b.path)) {
             continue;
         }
         m_allBooks.push_back(b);
@@ -343,7 +360,8 @@ void MainWindow::loadAllReviews()
 {
     const QString dir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QFile f(dir + "/reviews.json");
-    if (!f.open(QIODevice::ReadOnly)) return;
+    if (!f.open(QIODevice::ReadOnly))
+        return;
 
     const QJsonObject root = QJsonDocument::fromJson(f.readAll()).object();
     for (BookItem &b : m_allBooks) {
@@ -352,12 +370,10 @@ void MainWindow::loadAllReviews()
             double sum = 0;
             for (const QJsonValue &v : root[b.title].toArray()) {
                 QJsonObject obj = v.toObject();
-                UserReview r{
-                    obj["username"].toString(),
-                    obj["rating"].toInt(),
-                    obj["comment"].toString(),
-                    obj["date"].toString()
-                };
+                UserReview r{obj["username"].toString(),
+                             obj["rating"].toInt(),
+                             obj["comment"].toString(),
+                             obj["date"].toString()};
                 b.reviews.append(r);
                 sum += r.rating;
             }

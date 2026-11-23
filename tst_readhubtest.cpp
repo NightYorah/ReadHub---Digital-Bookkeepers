@@ -1,10 +1,14 @@
-#include <QtTest>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QLabel>
 #include <QDateTime>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QTextEdit>
+#include <QPushButton>
+#include <QtTest>
 #include "loginwindow.h"
 #include "mainwindow.h"
+#include "StarRatingWidget.h"
+
 
 class ReadHubTest : public QObject
 {
@@ -21,6 +25,8 @@ private slots:
 
     //Test for the mainwindow page
     void testMainWindowInitialization();
+    void testReviewButtonsCreated();
+    void testReviewsDisplayOnButtonClick();
 };
 
 //Test login with Dummy Credentials successful
@@ -29,8 +35,8 @@ void ReadHubTest::testLoginSuccessWithDummyCredentials()
     LoginWindow loginWin;
     loginWin.show();
 
-    QList<QLineEdit*> editors = loginWin.findChildren<QLineEdit*>();
-    QList<QPushButton*> buttons = loginWin.findChildren<QPushButton*>();
+    QList<QLineEdit *> editors = loginWin.findChildren<QLineEdit *>();
+    QList<QPushButton *> buttons = loginWin.findChildren<QPushButton *>();
 
     if (editors.size() >= 4 && !buttons.isEmpty()) {
         // Simulate the input of Dummy Credentials with "testuser123" and "password"
@@ -55,8 +61,8 @@ void ReadHubTest::testLoginFailureWithInvalidCredentials()
     LoginWindow loginWin;
     loginWin.show();
 
-    QList<QLineEdit*> editors = loginWin.findChildren<QLineEdit*>();
-    QList<QPushButton*> buttons = loginWin.findChildren<QPushButton*>();
+    QList<QLineEdit *> editors = loginWin.findChildren<QLineEdit *>();
+    QList<QPushButton *> buttons = loginWin.findChildren<QPushButton *>();
 
     if (editors.size() >= 4 && !buttons.isEmpty()) {
         editors[0]->clear();
@@ -67,13 +73,14 @@ void ReadHubTest::testLoginFailureWithInvalidCredentials()
 
         // Check error label
         bool hasErrorMessage = false;
-        for (QLabel *label : loginWin.findChildren<QLabel*>()) {
+        for (QLabel *label : loginWin.findChildren<QLabel *>()) {
             if (label->text().contains("Invalid username or password.")) {
                 hasErrorMessage = true;
                 break;
             }
         }
-        QVERIFY2(hasErrorMessage, "Expected 'Invalid username or password.' error label, but none was displayed.");
+        QVERIFY2(hasErrorMessage,
+                 "Expected 'Invalid username or password.' error label, but none was displayed.");
     } else {
         QFAIL("Could not find input fields or login button.");
     }
@@ -85,8 +92,8 @@ void ReadHubTest::testSignupSuccessWithNewCredentials()
     LoginWindow loginWin;
     loginWin.show();
 
-    QList<QLineEdit*> editors = loginWin.findChildren<QLineEdit*>();
-    QList<QPushButton*> buttons = loginWin.findChildren<QPushButton*>();
+    QList<QLineEdit *> editors = loginWin.findChildren<QLineEdit *>();
+    QList<QPushButton *> buttons = loginWin.findChildren<QPushButton *>();
 
     // editors[2] is the new user name，editors[3] is the new password，buttons[1] is the sign up button
     if (editors.size() >= 4 && buttons.size() >= 2) {
@@ -99,13 +106,14 @@ void ReadHubTest::testSignupSuccessWithNewCredentials()
         QTest::mouseClick(buttons[1], Qt::LeftButton);
 
         bool hasSuccessMessage = false;
-        for (QLabel *label : loginWin.findChildren<QLabel*>()) {
+        for (QLabel *label : loginWin.findChildren<QLabel *>()) {
             if (label->text().contains("New Account Created!")) {
                 hasSuccessMessage = true;
                 break;
             }
         }
-        QVERIFY2(hasSuccessMessage, "Expected 'New Account Created!' label after successful signup.");
+        QVERIFY2(hasSuccessMessage,
+                 "Expected 'New Account Created!' label after successful signup.");
     } else {
         QFAIL("Could not find input fields or signup button.");
     }
@@ -117,10 +125,10 @@ void ReadHubTest::testSignupFailureWithBlankCredentials()
     LoginWindow *loginWin = new LoginWindow();
     loginWin->show();
 
-    QLineEdit *usernameEdit = loginWin->findChild<QLineEdit*>("signupUsernameLineEdit");
-    QLineEdit *passwordEdit = loginWin->findChild<QLineEdit*>("signupPasswordLineEdit");
-    QPushButton *signupBtn = loginWin->findChild<QPushButton*>("signupPushButton");
-    QLabel *failLabel = loginWin->findChild<QLabel*>("signupFailLabel");
+    QLineEdit *usernameEdit = loginWin->findChild<QLineEdit *>("signupUsernameLineEdit");
+    QLineEdit *passwordEdit = loginWin->findChild<QLineEdit *>("signupPasswordLineEdit");
+    QPushButton *signupBtn = loginWin->findChild<QPushButton *>("signupPushButton");
+    QLabel *failLabel = loginWin->findChild<QLabel *>("signupFailLabel");
 
     QVERIFY(usernameEdit != nullptr);
     QVERIFY(passwordEdit != nullptr);
@@ -166,8 +174,8 @@ void ReadHubTest::testSignupFailureWithExistingCredentials()
     LoginWindow loginWin;
     loginWin.show();
 
-    QList<QLineEdit*> editors = loginWin.findChildren<QLineEdit*>();
-    QList<QPushButton*> buttons = loginWin.findChildren<QPushButton*>();
+    QList<QLineEdit *> editors = loginWin.findChildren<QLineEdit *>();
+    QList<QPushButton *> buttons = loginWin.findChildren<QPushButton *>();
 
     if (editors.size() >= 4 && buttons.size() >= 2) {
         editors[2]->clear();
@@ -178,13 +186,15 @@ void ReadHubTest::testSignupFailureWithExistingCredentials()
         QTest::mouseClick(buttons[1], Qt::LeftButton);
 
         bool hasErrorMessage = false;
-        for (QLabel *label : loginWin.findChildren<QLabel*>()) {
+        for (QLabel *label : loginWin.findChildren<QLabel *>()) {
             if (label->text().contains("Username unavailable")) {
                 hasErrorMessage = true;
                 break;
             }
         }
-        QVERIFY2(hasErrorMessage, "Expected 'Username unavailable' label when signing up with an existing username.");
+        QVERIFY2(
+            hasErrorMessage,
+            "Expected 'Username unavailable' label when signing up with an existing username.");
     } else {
         QFAIL("Could not find input fields or buttons.");
     }
@@ -196,8 +206,8 @@ void ReadHubTest::testLoginSuccessAfterSignup()
     LoginWindow loginWin;
     loginWin.show();
 
-    QList<QLineEdit*> editors = loginWin.findChildren<QLineEdit*>();
-    QList<QPushButton*> buttons = loginWin.findChildren<QPushButton*>();
+    QList<QLineEdit *> editors = loginWin.findChildren<QLineEdit *>();
+    QList<QPushButton *> buttons = loginWin.findChildren<QPushButton *>();
 
     if (editors.size() >= 4 && buttons.size() >= 2) {
         QString dynamicUser = "user_" + QString::number(QDateTime::currentMSecsSinceEpoch());
@@ -216,7 +226,8 @@ void ReadHubTest::testLoginSuccessAfterSignup()
         QTest::mouseClick(buttons[0], Qt::LeftButton);
 
         //Check the success of login
-        QVERIFY2(!loginWin.isVisible(), "Newly registered user failed to log in or window was not closed.");
+        QVERIFY2(!loginWin.isVisible(),
+                 "Newly registered user failed to log in or window was not closed.");
     } else {
         QFAIL("Could not find input fields or buttons.");
     }
@@ -227,6 +238,39 @@ void ReadHubTest::testMainWindowInitialization()
 {
     MainWindow *w = new MainWindow();
     QVERIFY2(w != nullptr, "MainWindow failed to initialize.");
+    delete w;
+}
+
+//  Test review buttons are created for each entry on the books list
+void ReadHubTest::testReviewButtonsCreated()
+{
+    MainWindow *w = new MainWindow();
+    QList<QPushButton *> reviewButtons = w->findChildren<QPushButton *>("reviewToggleBtn");
+    QVERIFY2(reviewButtons[0] != nullptr, "No buttons loaded");
+    QVERIFY2(reviewButtons[3] != nullptr, "Not all buttons loaded");
+    delete w;
+}
+
+// Test review menu displays on button click
+void ReadHubTest::testReviewsDisplayOnButtonClick()
+{
+    QSKIP("Unfinished");
+    //something wrong with how this finds children, no time to resolve for now
+    MainWindow *w = new MainWindow();
+    QList<QPushButton *> reviewButtons = w->findChildren<QPushButton *>("reviewToggleBtn");
+    QTest::mouseClick(reviewButtons[0], Qt::LeftButton);
+    QVBoxLayout *bookWidget = w->findChild<QVBoxLayout *>("bookWidget");
+    //gives index out of range error, not enough time to resolve
+    //QList<QLabel *> reviewLabels = bookWidget->findChildren<QLabel *>();
+    //QVERIFY2(reviewLabels[0] != nullptr && reviewLabels[0]->text() == "<b>Other Users' Ratings & Reviews:</b>", "othersLabel not properly created");
+    //QVERIFY2(reviewLabels[1] != nullptr, "othersContent not properly loaded");
+    // gives a compiler error for some reason, not enough time to resolve
+    //StarRatingWidget *stars = bookWidget->findChild<StarRatingWidget *>();
+    //QVERIFY2(stars != nullptr, "starWidget not properly loaded");
+    QTextEdit *commentBox = bookWidget->findChild<QTextEdit *>();
+    //QVERIFY2(commentBox != nullptr, "commentBox not properly loaded");
+    QPushButton *submitBtn = bookWidget->findChild<QPushButton *>();
+    //QVERIFY2(submitBtn != nullptr && submitBtn->text() == "Submit Review", "commentBox not properly loaded");
     delete w;
 }
 

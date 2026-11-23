@@ -1,20 +1,22 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QList>
 #include <QMainWindow>
 #include <QString>
-#include <vector>
-#include <QList>
 #include "uploadwindow.h"
+#include <vector>
 
-struct UserReview {
+struct UserReview
+{
     QString username;
     int rating;
     QString comment;
     QString date;
 };
 
-struct BookItem {
+struct BookItem
+{
     QString title;
     QString author;
     QString date;
@@ -50,7 +52,7 @@ private:
     std::vector<BookItem> m_allBooks;
 
     void loadDummyData();
-    void displayBooks(const std::vector<BookItem>& books);
+    void displayBooks(const std::vector<BookItem> &books);
 
 public:
     void setBooks(const QList<FileUpload> &books);
@@ -61,7 +63,5 @@ private:
     void loadLibrary();
     void saveAllReviews() const;
     void loadAllReviews();
-
 };
 #endif // MAINWINDOW_H
-
